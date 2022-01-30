@@ -149,9 +149,9 @@ RadLevel = A*x;
 % appropriate dose.
 %
 
-if Analysis == "Average"
+if Analysis == "Average"                                                            %Evite repetição de código, da linha 152 a 187 está fazendo a mesma coisa, crie 3 funções uma para testar o que é e outras duas para cada um dos testes com suas respostas
     if norm(alpha,1) > tol
-        Tumor_dose = "On average, the tumors prescription is not attainable.";
+        Tumor_dose = "On average, the tumors prescription is not attainable.";      
     else
         AverageTumorDose = norm(ATumor*x,1)/tr;
         Tumor_dose = "The average tumor dose is within the prescribed uniformity setting. The average tumor dose is " + num2str(AverageTumorDose);
@@ -170,8 +170,8 @@ end
 % How the Critical Structures fair under our plan.
 %
 
-if Analysis == "Average"
-    AverageCritDesc = mean(beta);
+if Analysis == "Average"                                                                                     %Dado que você já fez o teste do que é você só precisa criar mais duas funções, não tenha medo de fazer funções pequenas
+    AverageCritDesc = mean(beta);                                                                            % se você fizer duas funções cada uma fica com 3 linhas de código
     if AverageCritDesc > tol
         Critical_dose = "The average citical sructure dose is over its prescribed dose by " + num2str(AverageCritDesc);
     else
@@ -190,16 +190,16 @@ end
 %
 % State How We Did on The Regular Tissue
 %
-
-if (Analysis == "Average") && (rr ~= 0)
+%do 193 ao 209 jogue dentro de uma função, coloque um nome que explica todos esses tests depois disso reduza esses blocos internos, não tenha medo de usar returns esqueça isso da programação estruturada que te fala que só pode ter um return.
+if (Analysis == "Average") && (rr ~= 0)  %siga um padrão nos nomes das suas variaveis, nunca comece com letra maiuscula com nome de variavel o correto: averageRegDesc e nunca use "_" o correto é regularDose                                                        
     AverageRegDesc = mean(gamma);
-    if AverageRegDesc > tol
+    if AverageRegDesc > tol %assumindo que nunca vai ser igual, você só tem dois resultados não precisa usar if e else ou é um ou é outro, você tem certeza que nunca vai ser igual?, pode usar um operadores ternario e reduzir isso tudo para 3 linhas 
 	    Regular_dose = "On average, the restricted regular tissue is above its prescribed dose by " + num2str(AverageRegDesc);
     elseif AverageRegDesc < tol
         Regular_dose = "On average, the restricted regular tissue is below its prescribed dose.";
     end
 elseif rr ~= 0
-    if gamma > tol
+    if gamma > tol     %se nunca vai ser igual faça igual construa uma função e use um operador ternario para reduzir tudo isso para 3 linhas dentro de uma função.
         Regular_dose = "The restricted regular tissue is guaranteed to be above its prescribed dose by " + num2str(gamma);
     elseif gamma < tol
         Regular_dose = "The restricted regular tissue is guaranteed to be below its prescribed dose.";
@@ -212,11 +212,15 @@ end
 % About hot spots
 %
 
-if max(RadLevel) <= 1.1*max(TUB)
-    Hot_spots = "There are no hot spots.";
+if max(RadLevel) <= 1.1*max(TUB)       %mude para radLevel
+    Hot_spots = "There are no hot spots.";    % não use "_", mude para hotSpots
 else
     Hot_spots = "There are hot spots. You may want to make further restrictions.";
 end
+%Mude para assim se não quiser usar uma função para isso, mas com uma função fica com só 2 linhas também.
+%hotSplots = if (max(RadLevel) <= 1.1*max(TUB)); casetrue("There are no hot spots."); else; casefalse("There are hot spots. You may want to make further restrictions."); end
+
+
 
 %
 % Add rows to the table
@@ -225,3 +229,4 @@ end
 Table(Counter,:) = {Counter, Case, Difficulty, Analysis, Method, Number_of_Constraints, Number_of_Variables, output.cplexstatus, output.cplexstatusstring, output.message, output.iterations, output.time, Tumor_dose, Critical_dose, Regular_dose, Hot_spots}; 
 
  end
+%Comece o nome de todas as variaveis com minusculo, boas praticas!!!
