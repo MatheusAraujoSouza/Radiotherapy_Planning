@@ -2,10 +2,10 @@ using SparseArrays
 using LinearAlgebra
 using JuMP
 using CPLEX
-
-function Solver(Path, Analysis, Method, p, dataID_TGoal, dataID_CUB, dataID_RUB)
-#
-# This routine inlcude the CPLEX solver & the analysis window created by
+#Uma função não deve fazer mais de uma coisa, Solver não traz muita informação do que realmente ela faz, não tenha medo de colocar nomes grandes SolverForEinstenEquations(...)
+function Solver(Path, Analysis, Method, p, dataID_TGoal, dataID_CUB, dataID_RUB)  #Você poderia criar uma struct ou uma classe e jogar todos esses parametros nela, assim sua função iria receber apenas 
+#                                                                                  um unico parametro e quando for usar dentro da função, você faz assim dataParameters.Path etc
+# This routine inlcude the CPLEX solver & the analysis window created by           imagina se você precisa aumentar a quantidade desses parametros o tamanho que isso vai chegar.
 # Allen Holder.
 #
 # OBSERVATION: "Regular" stands for "Good tissue"
@@ -22,7 +22,7 @@ function Solver(Path, Analysis, Method, p, dataID_TGoal, dataID_CUB, dataID_RUB)
 #
 tol = 10 ^ -4 #certo
 
-
+#Mude o nome das variáveis para tumorRow, tumorColum, critalRow etc, são boas praticas seguidas por todos os programadores, ninguém quer ficar voltando para ler o que era no seu comentario
 #
 # Grab some sizes.
 #
@@ -81,6 +81,8 @@ omega = kappa / tol
 #
 #
 
+  
+  #se quando não for um é o outro, da para reduzir isso para um if, logo se é Avarage entra se não já é Absolute coloque tudo isso dentro de oura função. Boas práticas!! 
 if Analysis == "Average" #certo
 
   U  = spzeros([ ATumor    zeros(tr, tr) zeros(tr, gr) zeros(tr, rr);
@@ -112,7 +114,7 @@ end
 
 model = Model(CPLEX.Optimizer)
 
-if Method == "Simplex"
+if Method == "Simplex"                                  #O mesmo para issa parte, coloque dentro de outra função e reduza para um if 
 #    opt = cplexoptimset["cplex"]
 #    opt.timelimit = 900
 #    opt.lpmethod = 1
@@ -133,9 +135,8 @@ TotalTime = etime(clock,StartTime)
 # decision variables.
 #
 
-if Analysis == "Average"
-
-  alpha = x[tc+1:tc+tr]
+if Analysis == "Average"                                                    #Da para reduzir tudo isso em um if também, faça o mesmo, crie uma função use o primeiro if e retorne caso verdade se não ele vai sair e já executar o proximo                                                              #se for retorne as variaveis se não aplica o que tem no elseif, outra coisa use if else não tem necessidade                                                                    #de usar else if
+  alpha = x[tc+1:tc+tr]                                                     #se acha que a informação de bater no nome do elseif relevante coloque no titulo dessa função, tudo isso vai deixar seu código muito melhor!
   beta  = x[tc+tr+1:tc+tr+gr]
   gamma = x[tc+tr+gr+1:tc+tr+gr+rr]
   x     = x[1:tc]
